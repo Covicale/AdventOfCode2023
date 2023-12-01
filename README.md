@@ -1,5 +1,5 @@
 # AdventOfCode2023
-Advent of Code 2023 made in Rust
+Advent of Code 2023 to learn Rust, so maybe the code is not the most optimal approach
 
 In order to execute execute on day, go to the folder and run
 ```sh
