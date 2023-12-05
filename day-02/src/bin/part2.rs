@@ -2,13 +2,13 @@ struct Cubes(usize, usize, usize); // red, green, blue
 
 struct Game {
     id: usize,
-    game_valid: bool
+    number_cubes: Cubes,
 }
 
-fn part_one(input: &str, cubes: &Cubes) -> usize {
+fn part_two(input: &str) -> usize {
     let mut games: Vec<Game> = Vec::new();
     for line in input.lines() {
-        let mut game = Game {id: 0, game_valid: true};
+        let mut game = Game {id: 0, number_cubes: Cubes(0, 0, 0)};
         let line = line.replace(";", "").replace(":", "").replace(",","" );
         let line_split = line.split(" ").collect::<Vec<&str>>();
         game.id = line_split[1].parse::<usize>().unwrap();
@@ -16,9 +16,9 @@ fn part_one(input: &str, cubes: &Cubes) -> usize {
             let number = pair[0].parse::<usize>().unwrap();
             let color = pair[1];
             match color {
-                "red" => if cubes.0 < number { game.game_valid = false; break; } else {},
-                "green" => if cubes.1 < number { game.game_valid = false; break; } else {},
-                "blue" => if cubes.2 < number { game.game_valid = false; break; } else {},
+                "red" => if game.number_cubes.0 < number { game.number_cubes.0 = number; } else { },
+                "green" => if game.number_cubes.1 < number { game.number_cubes.1 = number; } else { },
+                "blue" => if game.number_cubes.2 < number { game.number_cubes.2 = number; } else { },
                 _ => println!("Error")
             }
         }
@@ -27,16 +27,15 @@ fn part_one(input: &str, cubes: &Cubes) -> usize {
 
     let mut result = 0;
     for game in games {
-        result += if game.game_valid { game.id } else { 0 };
+        let cubes_power = game.number_cubes.0 * game.number_cubes.1 * game.number_cubes.2;
+        result += cubes_power;
     }
     return result;
 }
 
 fn main() {
     let input_file: &str = include_str!("../input.txt");
-
-    let cubes = Cubes(12, 13, 14);
-    let result = part_one(&input_file, &cubes);
+    let result = part_two(&input_file);
 
     println!("Result: {}", result);
 }
