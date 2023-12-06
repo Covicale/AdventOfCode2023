@@ -1,4 +1,6 @@
-#[derive(Debug)]
+use roots::Roots;
+use roots::find_roots_quadratic;
+
 struct Race {
     duration: usize,
     record_distance: usize,
@@ -6,14 +8,12 @@ struct Race {
 
 impl Race {
     fn ways_to_win(&self) -> usize {
-        let mut ways: usize = 0;
-        for hold_time in 1..self.duration {
-            let distance: usize = hold_time * (self.duration - hold_time);
-            if distance > self.record_distance {
-                ways += 1;
-            } 
+        // x^2 - Tx + L = 0 -> x = hold_time | T = duration | L = record_distance
+        let roots = find_roots_quadratic(1.0, -(self.duration as f64), self.record_distance as f64);
+        return match roots {
+            Roots::Two([a, b]) => return b as usize - a as usize,
+            _ => 0,
         }
-        return ways;
     }
 }
 
@@ -22,8 +22,6 @@ fn part_two(input: &str) -> usize {
     let input: Vec<Vec<String>> = input.lines().map(|x| x.split_whitespace().map(String::from).collect()).collect();
     race.duration = input[0][1..].join("").parse().unwrap();
     race.record_distance = input[1][1..].join("").parse().unwrap();
-
-    println!("{:?}", race);
     return race.ways_to_win();
 }
 
